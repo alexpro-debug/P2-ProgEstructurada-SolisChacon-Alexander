@@ -35,6 +35,7 @@ def obtener_info_sistema():
     print(f"Versión de Python: {version}")
     print("-------------------------------\n")
     return plataforma
+
 # TODO: Implementar lógica 
 pass 
 def simular_metricas_entrenamiento(cantidad_epochs): 
@@ -69,13 +70,31 @@ def simular_metricas_entrenamiento(cantidad_epochs):
     print(f"Fin del entrenamiento. Tiempo transcurrido: {diferencia_tiempo.total_seconds()} segundos.\n")
 
     return lista_loss, latencias
+
 # TODO: Implementar lógica 
 pass 
-def analizar_rendimiento(lista_loss): 
+def analizar_rendimiento(lista_loss, latencias): 
     """ 
     Usa la biblioteca 'statistics' para analizar el comportamiento del entrenamiento. 
     Requisitos: 3 llamadas distintas a la biblioteca 'statistics'. 
     """ 
+    print("--- Análisis de Rendimiento ---")
+    
+    # Validación con if/else (Regla de oro: No usar try-except)
+    if len(lista_loss) > 1 and len(latencias) > 0:
+        # 1. statistics.mean(): Media de pérdida
+        media_loss = statistics.mean(lista_loss)
+        # 2. statistics.stdev(): Desviación estándar
+        stdev_loss = statistics.stdev(lista_loss)
+        # 3. statistics.median(): Mediana de latencia
+        mediana_latencia = statistics.median(latencias)
+
+        print(f"Media de Loss: {media_loss:.4f}")
+        print(f"Desviación Estándar de Loss: {stdev_loss:.4f} (Estabilidad)")
+        print(f"Mediana de Latencia: {mediana_latencia:.4f} segundos\n")
+    else:
+        print("Error: No hay suficientes datos para calcular estadísticas completas.\n")
+
 # TODO: Implementar lógica 
 pass 
 def calcular_rmse(predicciones, reales): 
