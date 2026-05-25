@@ -36,8 +36,6 @@ def obtener_info_sistema():
     print("-------------------------------\n")
     return plataforma
 
-# TODO: Implementar lógica 
-pass 
 def simular_metricas_entrenamiento(cantidad_epochs): 
     """ 
     Usa las bibliotecas 'random' y 'datetime' para simular los datos de entrenamiento. 
@@ -71,8 +69,6 @@ def simular_metricas_entrenamiento(cantidad_epochs):
 
     return lista_loss, latencias
 
-# TODO: Implementar lógica 
-pass 
 def analizar_rendimiento(lista_loss, latencias): 
     """ 
     Usa la biblioteca 'statistics' para analizar el comportamiento del entrenamiento. 
@@ -95,8 +91,6 @@ def analizar_rendimiento(lista_loss, latencias):
     else:
         print("Error: No hay suficientes datos para calcular estadísticas completas.\n")
 
-# TODO: Implementar lógica 
-pass 
 def calcular_rmse(predicciones, reales): 
     """ 
     Usa la biblioteca 'math' para calcular el Root Mean Squared Error (RMSE). 
@@ -126,11 +120,63 @@ def calcular_rmse(predicciones, reales):
     
     return rmse
 
-# TODO: Implementar lógica 
-pass 
 # ========================================== 
 # 4. PROGRAMA PRINCIPAL (PUNTO DE ENTRADA) 
 # ========================================== 
 if __name__ == "__main__": 
     print("=== INICIANDO SIMULADOR DE AGENTES DE IA ===") 
-# TODO: Invocar las funciones, orquestar el flujo y mostrar reportes ordenados. 
+
+    #1. obtenemos información del sistema
+    obtener_info_sistema()
+    
+    #2. simulamos los datos (pasando nuestra constante MAX_EPOCHS)
+    loss_simulado, latencias_simuladas = simular_metricas_entrenamiento(MAX_EPOCHS)
+    
+    #3. analizamos el rendimiento con statistics
+    analizar_rendimiento(loss_simulado, latencias_simuladas)
+
+    #para el cálculo del RMSE, comparamos nuestras "predicciones" (loss simulado)
+    #contra un escenario "real" ideal donde el loss esperado era 0.0
+    valores_reales_ideales = [0.0] * len(loss_simulado)
+    
+    #4. calculamos el error final
+    rmse_final = calcular_rmse(loss_simulado, valores_reales_ideales)
+
+    #5. validación final y salida del sistema
+    if rmse_final > UMBRAL_ERROR_CRITICO:
+        print(f"¡ALERTA CRÍTICA! El RMSE ({rmse_final:.4f}) superó el umbral de {UMBRAL_ERROR_CRITICO}.")
+        print("Abortando proceso por inestabilidad de la red neuronal...")
+        #sys.exit(): Forzar salida limpia del programa si es crítico (3er llamado a sys) 
+        sys.exit(1)
+    else:
+        print("Simulación finalizada exitosamente. El agente es estable.")
+
+"""
+CUESTIONARIO DE ANÁLISIS DE BIBLIOTECAS (10 PUNTOS)
+Deberás responder las siguientes 5 preguntas teóricas al final de tu código, utilizándolo como comentarios multilínea ("):
+
+1. Uso de Objetos y Métodos: En tu código, al usar datetime.datetime.now(), ¿cuál es el objeto/clase y cuál es el método que estás llamando? Explica cómo se relaciona esto con el concepto de biblioteca externa.
+R= el primer datetime es la libreria, el segundo es la clase y 
+now() el metodo. usar esto nos ahorra programar cosas desde cero 
+porque alguien mas ya lo hizo y nomas lo instanciamos.
+
+2. Diferenciación Técnica: ¿Qué diferencia existe en la sintaxis de tu código al importar un módulo completo (ej: import math) versus importar un método específico (ej: from math import sqrt) al momento de invocar sus funciones?
+R= con import math traes todo pero siempre debes poner math.sqrt(). 
+si usas from math import sqrt lo llamas directo nomas poniendo sqrt() 
+y es mas practico.
+
+3. Flujo y Lógica: Describe brevemente la secuencia lógica de pasos que implementaste para conectar los datos generados por tu función de simulación con la función que calcula el error (RMSE).
+R= la funcion de simular guarda los loss random en una lista. 
+luego en el main le mando esa lista a la funcion de rmse junto 
+a una lista de puros ceros reales para poder restarlos y hacer el calculo.
+
+4. Mapeo de Tipos de Datos: Identifica al menos dos tipos de datos complejos (colecciones) que utilizaste para organizar los resultados de tus análisis y justifica por qué elegiste esa estructura en lugar de variables simples.
+R= use listas para el loss y latencias porque es mas facil ir metiendo 
+datos con append en cada iteracion. hacer variables separadas (loss1, loss2) 
+seria inviable y statistics a fuerza necesita listas.
+
+5. Autoevaluación de Abstracción: Al utilizar las funciones de la biblioteca statistics, ¿tuviste que programar la fórmula matemática matemática de la desviación estándar? Relaciona esto con el concepto de Abstracción visto en clase.
+R= no, no programe la formula. de eso trata la abstraccion, la 
+libreria hace toda la matematica compleja por debajo y yo solo pido 
+el resultado sin preocuparme de como lo hace.
+"""
