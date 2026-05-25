@@ -80,13 +80,13 @@ def analizar_rendimiento(lista_loss, latencias):
     """ 
     print("--- Análisis de Rendimiento ---")
     
-    # Validación con if/else (Regla de oro: No usar try-except)
+    #validación con if/else
     if len(lista_loss) > 1 and len(latencias) > 0:
-        # 1. statistics.mean(): Media de pérdida
+        #1. statistics.mean(): media de pérdida
         media_loss = statistics.mean(lista_loss)
-        # 2. statistics.stdev(): Desviación estándar
+        #2. statistics.stdev(): desviación estándar
         stdev_loss = statistics.stdev(lista_loss)
-        # 3. statistics.median(): Mediana de latencia
+        #3. statistics.median(): mediana de latencia
         mediana_latencia = statistics.median(latencias)
 
         print(f"Media de Loss: {media_loss:.4f}")
@@ -102,6 +102,30 @@ def calcular_rmse(predicciones, reales):
     Usa la biblioteca 'math' para calcular el Root Mean Squared Error (RMSE). 
     Requisitos: 3 llamadas distintas a la biblioteca 'math'. 
     """ 
+    #validación con if/else para evitar fallos
+    if len(predicciones) == 0 or len(predicciones) != len(reales):
+        print("Datos inválidos para calcular RMSE.")
+        return 0.0
+
+    suma_errores_cuadrados = 0
+    for i in range(len(predicciones)):
+        diferencia = predicciones[i] - reales[i]
+        #1. math.pow(): aplicar función de potencia para elevar diferencias al cuadrado [cite: 35, 36]
+        error_cuadrado = math.pow(diferencia, 2)
+        suma_errores_cuadrados += error_cuadrado
+
+    mse = suma_errores_cuadrados / len(predicciones)
+    #2. math.sqrt(): calcular la raíz cuadrada para la métrica RMSE 
+    rmse = math.sqrt(mse)
+    #3. math.ceil(): usar redondeo hacia arriba para el cálculo final de epochs 
+    epochs_extra = math.ceil(rmse * 5)
+
+    print("--- Métricas de Error ---")
+    print(f"RMSE Calculado: {rmse:.4f}")
+    print(f"Recomendación: Entrenar por {epochs_extra} epochs adicionales.\n")
+    
+    return rmse
+
 # TODO: Implementar lógica 
 pass 
 # ========================================== 
